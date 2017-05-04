@@ -16,10 +16,14 @@ public class SelectionScript : MonoBehaviour {
     private float RightIndexTrigger = 0f;
     private bool BButton = false;
     private bool AButton = false;
+    //Layer where all the planets are. Used for raycasting
+    private int PlanetLayerMask;
 
     // Use this for initialization
     void Start()
     {
+        //Set Planet layer mask
+        PlanetLayerMask = LayerMask.GetMask("Planets");
         ListOfSelections = new List<GameObject>();
         //SelectionSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere); //instantiate selection sphere
         SelectionSphere.transform.parent = SelectionSpherePosition; //Set selection sphere as a child to selection sphere position
@@ -149,7 +153,8 @@ public class SelectionScript : MonoBehaviour {
         RaycastHit hit;
 
         //Cast rays to see if something is hit
-        if(Physics.Raycast(RaycastLocation.position,gameObject.transform.forward,out hit, 20f))
+
+        if(Physics.Raycast(RaycastLocation.position,gameObject.transform.forward,out hit, 20f, PlanetLayerMask))
         {
             //Draw raycast for debugging
             Debug.DrawLine(gameObject.transform.position, hit.point, Color.red);

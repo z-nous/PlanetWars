@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000011346613850}
   - 114: {fileID: 114000011598074192}
   - 54: {fileID: 54000010311382150}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fighter
   m_TagString: Fighter
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   - 33: {fileID: 33000012953354306}
   - 65: {fileID: 65000013574699424}
   - 23: {fileID: 23000013226831712}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FighterModel
   m_TagString: Fighter
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - 4: {fileID: 4000010836841514}
   - 33: {fileID: 33000011128708262}
   - 23: {fileID: 23000012047809662}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: IsSelected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,5 +220,7 @@ MonoBehaviour:
   Speed: 100
   OrbitSpeed: 100
   OrbitDistanceVariance: 0.3
+  MinOrbitDistance: 0.4
   OrbitInclinationVariance: 5
+  SeeingDistance: 0.5
   IsSelectedMesh: {fileID: 1000012297867336}

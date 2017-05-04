@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000012065371074}
   - 114: {fileID: 114000013594851526}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Planet
   m_TagString: Planet
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - 33: {fileID: 33000010978673294}
   - 135: {fileID: 135000013236851824}
   - 23: {fileID: 23000010071191192}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Planet
   m_TagString: Planet
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000010603538656}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FigtherSpawnpoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,6 @@ MonoBehaviour:
   Health: 20
   Owner: 0
   FigtherSpawnInterval: 1
-  GameMaster: {fileID: 0}
 --- !u!135 &135000013236851824
 SphereCollider:
   m_ObjectHideFlags: 1

@@ -11,18 +11,26 @@ public class Fighter : MonoBehaviour {
     public float OrbitDistanceVariance = 0.5f; //Distance of orbit around planets
     public float MinOrbitDistance = 0.4f;
     public float OrbitInclinationVariance = 0.1f; //Variance in orbit inclinations
+    public float SeeingDistance = 0.5f;
     public GameObject IsSelectedMesh; //Mesh to show if the fighter is selected
 
     private GameObject GameMaster; //Game master
     private GameObject LastTarge; //Last target of the fighter
+    private Transform EnemyFighter;
     private bool Orbiting = false; //Is fighter orbiting
-    private bool LineOfSightToTarget = true;
+    private bool LineOfSightToTarget = true; //Is there a line of sight to target
+    private bool IsEnemyNear = false;
     private int TargetOwner = 0; //Owner of the target
     private float DistanceToTarget = 0f; //Distance to target
     private float OrbitDistance = 0f;
     private Vector3 OrbitInclination; //Orbit inclination
+    private int PlanetLayerMask;
+    private int EnemyLayerMask;
     // Use this for initialization
     void Start () {
+        //Set Planets layer mask for raycasting
+        PlanetLayerMask = LayerMask.GetMask("Planets");
+
         //Add gamemaster
         IsSelectedMesh.GetComponent<MeshRenderer>().enabled = false;
         if (GameMaster == null)
@@ -39,24 +47,58 @@ public class Fighter : MonoBehaviour {
         OrbitSpeed = (1 - OrbitDistance) * OrbitSpeed;
 
         SetColor();
+
+        //construct enemy layermask to be used in spherecast to find enemies
+        if (gameObject.layer == 8) EnemyLayerMask = 1 << 9 | 1 << 10 | 1 << 11;
+        if (gameObject.layer == 9) EnemyLayerMask = 1 << 8 | 1 << 10 | 1 << 11;
+        if (gameObject.layer == 10) EnemyLayerMask = 1 << 8 | 1 << 9 | 1 << 11;
+        if (gameObject.layer == 11) EnemyLayerMask = 1 << 8 | 1 << 9 | 1 << 10;
     }
 	
 	// Update is called once per frame
 	void Update () {
         //Get distance to target  if not orbiting and move towards the target
-        
 
-        if (Orbiting == false)
+        if(IsEnemyNear == false) CheckForEnemies();
+        if (IsEnemyNear == true) Attack();
+
+        if (Orbiting == false && IsEnemyNear == false)
         {
             MoveTowards();
         }
         //Orbit around player owned planets if close enough
-        if (Orbiting == true)
+        if (Orbiting == true && IsEnemyNear == false)
         {
             OrbitPlanet();
         }
     }
 
+    private void Attack()
+    {
+        //Check if the enemi si still in the game
+        if(EnemyFighter == true)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, EnemyFighter.position, Speed / 500 * Time.deltaTime);
+            Debug.DrawLine(transform.position, EnemyFighter.position,Color.red);
+        }
+        else
+        {
+            IsEnemyNear = false;
+        }
+    }
+
+    //Check if there are enemies nearby. if so Go and kill them
+    private void CheckForEnemies()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, SeeingDistance, EnemyLayerMask);
+        if (hitColliders.Length > 0)
+        {
+            Debug.DrawLine(transform.position, hitColliders[0].transform.position, Color.red);
+            EnemyFighter = hitColliders[0].transform;
+            //enemies are near. 
+            IsEnemyNear = true;
+        }
+    }
     //private functions
     //Orbit around planet if owned by player
     private void OrbitPlanet()
@@ -100,9 +142,9 @@ public class Fighter : MonoBehaviour {
         Vector3 RayDirection = Target.transform.position - transform.position; //Get the right direction
 
         //Cast rays to see if something is hit
-        if (Physics.Raycast(transform.position, RayDirection, out hit, 80f))
+        if (Physics.Raycast(transform.position, RayDirection, out hit, 80f, PlanetLayerMask))
         {
-            Debug.DrawLine(gameObject.transform.position, hit.point, Color.red);
+            Debug.DrawLine(gameObject.transform.position, hit.point, Color.green);
             if(Target == hit.transform.parent.gameObject)
             { 
                 LineOfSightToTarget = true;
