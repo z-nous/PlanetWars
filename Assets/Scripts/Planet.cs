@@ -9,14 +9,14 @@ public class Planet : MonoBehaviour {
     public int Health = 100; //health
     public int Owner = 0; //Owner of the planet
     public float FigtherSpawnInterval = 1f; //how often fighters are spawned
-    public GameObject GameMaster;
+    
 
     private float FighterSpawnIntervalTimer = 0f; //timer used to spawn fighters
+    private GameObject GameMaster;
 
 
-
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         //Add Gamemaster object if null
         if (GameMaster == null)
         {

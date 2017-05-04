@@ -9,11 +9,14 @@ public class Fighter : MonoBehaviour {
     public float Speed = 100f; //Speed of the fighter
     public float OrbitSpeed = 100f; //Orbit speed of Fighter
     public float OrbitDistanceVariance = 0.5f; //Distance of orbit around planets
+    public float MinOrbitDistance = 0.4f;
     public float OrbitInclinationVariance = 0.1f; //Variance in orbit inclinations
     public GameObject IsSelectedMesh; //Mesh to show if the fighter is selected
 
     private GameObject GameMaster; //Game master
+    private GameObject LastTarge; //Last target of the fighter
     private bool Orbiting = false; //Is fighter orbiting
+    private bool LineOfSightToTarget = true;
     private int TargetOwner = 0; //Owner of the target
     private float DistanceToTarget = 0f; //Distance to target
     private float OrbitDistance = 0f;
@@ -27,7 +30,7 @@ public class Fighter : MonoBehaviour {
             GameMaster = GameObject.FindGameObjectWithTag("GameMaster");
         }
         //Set random orbit distance to add variance
-        OrbitDistance = Random.Range(0.3f, 0.3f +OrbitDistanceVariance);
+        OrbitDistance = Random.Range(MinOrbitDistance, MinOrbitDistance + OrbitDistanceVariance);
 
         //Set random orbit inclination to add variance
         OrbitInclination = Vector3.up + new Vector3(Random.Range(0f, OrbitInclinationVariance) - 1f, 0f, 0f);
@@ -40,28 +43,74 @@ public class Fighter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //Get distance to target  if not orbiting
-        if (Orbiting == false) DistanceToTarget = Vector3.Distance(gameObject.transform.position, Target.transform.position);
+        //Get distance to target  if not orbiting and move towards the target
+        
 
-        //Move towards target
-        if(Orbiting == false) MoveTowards();
-
+        if (Orbiting == false)
+        {
+            MoveTowards();
+        }
         //Orbit around player owned planets if close enough
-        if (TargetOwner == Owner && Orbiting == true && DistanceToTarget <= OrbitDistance) OrbitPlanet();
+        if (Orbiting == true)
+        {
+            OrbitPlanet();
+        }
     }
 
     //private functions
     //Orbit around planet if owned by player
     private void OrbitPlanet()
     {
-
         transform.RotateAround(Target.transform.position,OrbitInclination, OrbitSpeed * Time.deltaTime);
+    }
+    //Orbit around certain target
+    private void OrbitPlanet(GameObject PlanetToOrbit)
+    {
+        transform.RotateAround(PlanetToOrbit.transform.position, OrbitInclination, OrbitSpeed * Time.deltaTime);
     }
 
     private void MoveTowards()
     {
-        transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Speed/500 * Time.deltaTime);
-        if (DistanceToTarget < OrbitDistance && TargetOwner == Owner) Orbiting = true;
+        //get distance to target and move forward
+        
+        CheckLineOfSight();
+
+        if (LineOfSightToTarget == true)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Speed / 500 * Time.deltaTime);
+        }
+
+        //If there is no line of sight, keep orbiting.
+        if (LineOfSightToTarget == false)
+        {
+            OrbitPlanet(LastTarge);
+        }
+
+        //If the figther is close enough to player owned planet, start orbiting
+        DistanceToTarget = Vector3.Distance(gameObject.transform.position, Target.transform.position);
+        if (DistanceToTarget < OrbitDistance && TargetOwner == Owner)
+        {
+            Orbiting = true;
+        }
+    }
+
+    private void CheckLineOfSight()
+    {
+        RaycastHit hit;
+        Vector3 RayDirection = Target.transform.position - transform.position; //Get the right direction
+
+        //Cast rays to see if something is hit
+        if (Physics.Raycast(transform.position, RayDirection, out hit, 80f))
+        {
+            Debug.DrawLine(gameObject.transform.position, hit.point, Color.red);
+            if(Target == hit.transform.parent.gameObject)
+            { 
+                LineOfSightToTarget = true;
+
+            }
+            else LineOfSightToTarget = false;
+            
+        }
     }
 
     private void SetColor()
@@ -85,7 +134,6 @@ public class Fighter : MonoBehaviour {
     //If fighter is selected set selectionmesh visible
     public void IsSelected(bool isselected)
     {
-        print("selected");
         if (isselected == true)
         {
             IsSelectedMesh.GetComponent<MeshRenderer>().enabled = true;
@@ -101,8 +149,11 @@ public class Fighter : MonoBehaviour {
 
     public void SetTarget(GameObject target)
     {
-        Target = target; Orbiting = false;
+        LastTarge = Target;
+        Target = target; 
         TargetOwner = Target.GetComponentInParent<Planet>().GetOwner();
+        LineOfSightToTarget = false;
+        Orbiting = false;
     }
 
     public void SetOwner(int owner)

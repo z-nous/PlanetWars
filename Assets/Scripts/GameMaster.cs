@@ -5,11 +5,16 @@ using System.Collections.Generic;
 public class GameMaster : MonoBehaviour {
 
     public List<GameObject> ListOfFighters;
+    public List<GameObject> ListOfPlanets;
 
 	// Use this for initialization
 	void Start () {
         ListOfFighters = new List<GameObject>();
-	}
+
+        //Add all planets to List of planets
+        ListOfPlanets = new List<GameObject>(GameObject.FindGameObjectsWithTag("Planet"));
+        print(ListOfPlanets.Count);
+    }
 	
 	// Update is called once per frame
 	void Update () {

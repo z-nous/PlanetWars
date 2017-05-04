@@ -7,10 +7,10 @@ public class SelectionScript : MonoBehaviour {
     public Transform SelectionSpherePosition; //Place where selection is spawned
     public Transform RaycastLocation;
     public LineRenderer PointingLineRenderer;
+    public GameObject SelectionSphere;
 
     private bool IsSelectionCreated = false; //is selection cube created
     private bool IsRightThumStickPressed = false;
-    private GameObject SelectionSphere;
     private float Scale = 0.05f; //Scale of selection sphere
     private List<GameObject> ListOfSelections;
     private float RightIndexTrigger = 0f;
@@ -21,7 +21,7 @@ public class SelectionScript : MonoBehaviour {
     void Start()
     {
         ListOfSelections = new List<GameObject>();
-        SelectionSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere); //instantiate selection sphere
+        //SelectionSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere); //instantiate selection sphere
         SelectionSphere.transform.parent = SelectionSpherePosition; //Set selection sphere as a child to selection sphere position
         SelectionSphere.transform.position = SelectionSpherePosition.position; //Set Selection Sphere position
         SelectionSphere.transform.localScale = new Vector3(Scale, Scale, Scale); //Set Selection Shere scale
@@ -161,11 +161,11 @@ public class SelectionScript : MonoBehaviour {
             {
 
                 //Only do this once
-                print(ListOfSelections.Count);
-                GameObject Target = hit.transform.gameObject;
+                //print(ListOfSelections.Count);
+                GameObject Target = hit.transform.parent.gameObject;
                 for (int i = 0; i < ListOfSelections.Count; i++)
                 {
-                    print("Target Set" + i);
+                    //print("Target Set" + i);
                     ListOfSelections[i].GetComponentInParent<Fighter>().SetTarget(Target);
                 }
                 //Clear selections after target is set
