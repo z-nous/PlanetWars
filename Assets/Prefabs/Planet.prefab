@@ -40,7 +40,7 @@ GameObject:
   - 23: {fileID: 23000010071191192}
   m_Layer: 12
   m_Name: Planet
-  m_TagString: Planet
+  m_TagString: Planetchild
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -7,6 +7,7 @@ TagManager:
   - GameMaster
   - Planet
   - Fighter
+  - Planetchild
   layers:
   - Default
   - TransparentFX

@@ -162,7 +162,7 @@ public class SelectionScript : MonoBehaviour {
             PointingLineRenderer.SetPosition(0, transform.position);
             PointingLineRenderer.SetPosition(1, hit.point);
 
-            if(hit.transform.tag == "Planet" && BButton == true)
+            if(hit.transform.tag == "Planetchild" && BButton == true)
             {
 
                 //Only do this once

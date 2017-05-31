@@ -211,7 +211,7 @@ public class Fighter : MonoBehaviour {
     void OnTriggerEnter(Collider collision)
     {
         //while hitting own planet
-        if (collision.gameObject.tag == "Planet" && collision.gameObject.GetComponentInParent<Planet>().GetOwner() == Owner)
+        if (collision.gameObject.tag == "Planetchild" && collision.gameObject.GetComponentInParent<Planet>().GetOwner() == Owner)
         {
             if (collision.gameObject.GetComponentInParent<Planet>().AddHealth() == true) //if health added. remove fighter 
             {
@@ -224,7 +224,7 @@ public class Fighter : MonoBehaviour {
         }
 
         //while hitting enemy planet
-        if (collision.gameObject.tag == "Planet" && collision.gameObject.GetComponentInParent<Planet>().GetOwner() != Owner)  
+        if (collision.gameObject.tag == "Planetchild" && collision.gameObject.GetComponentInParent<Planet>().GetOwner() != Owner)  
         {
             collision.gameObject.GetComponentInParent<Planet>().MinusHealth(Owner); //Minus planet health
             GameMaster.GetComponent<GameMaster>().RemoveFighterFromList(this.gameObject); //Remove fighter
