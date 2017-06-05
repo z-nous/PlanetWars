@@ -50,8 +50,10 @@ public class Planet : MonoBehaviour {
     private void SetColor()
     {
         if (Owner == 0) gameObject.GetComponentInChildren<Renderer>().material.color = Color.gray;
-        if (Owner == 1)gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
+        if (Owner == 1) gameObject.GetComponentInChildren<Renderer>().material.color = Color.blue;
         if (Owner == 2) gameObject.GetComponentInChildren<Renderer>().material.color = Color.red;
+        if (Owner == 3) gameObject.GetComponentInChildren<Renderer>().material.color = Color.green;
+        if (Owner == 4) gameObject.GetComponentInChildren<Renderer>().material.color = Color.yellow;
     }
 
     //###################################Public functions################################################
@@ -79,9 +81,9 @@ public class Planet : MonoBehaviour {
         if(Health == 0)
         {
             Owner = NewOwner;
-
             SetColor(); //Set right color to planet
             Health++;
+            GameMaster.GetComponent<GameMaster>().PlanetOwnershipChanged(NewOwner, Owner);
         }
     }
 }

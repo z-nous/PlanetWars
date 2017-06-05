@@ -8,6 +8,7 @@ public class SelectionScript : MonoBehaviour {
     public Transform RaycastLocation;
     public LineRenderer PointingLineRenderer;
     public GameObject SelectionSphere;
+    public int PlayerNumber = 1;
 
     private bool IsSelectionCreated = false; //is selection cube created
     private bool IsRightThumStickPressed = false;
@@ -18,6 +19,7 @@ public class SelectionScript : MonoBehaviour {
     private bool AButton = false;
     //Layer where all the planets are. Used for raycasting
     private int PlanetLayerMask;
+    private int SelectionLayerMask = 0;
 
     // Use this for initialization
     void Start()
@@ -38,6 +40,12 @@ public class SelectionScript : MonoBehaviour {
         PointingLineRenderer.SetVertexCount(2);
         PointingLineRenderer.SetPosition(0, RaycastLocation.position);
         PointingLineRenderer.SetPosition(1, RaycastLocation.position);
+
+        //Create selection layermask so only player owned fighters can be selected
+        if (PlayerNumber == 1) SelectionLayerMask = 8;
+        if (PlayerNumber == 2) SelectionLayerMask = 9;
+        if (PlayerNumber == 3) SelectionLayerMask = 10;
+        if (PlayerNumber == 4) SelectionLayerMask = 11;
     }
 
     // Update is called once per frame
@@ -48,6 +56,9 @@ public class SelectionScript : MonoBehaviour {
         BButton = OVRInput.Get(OVRInput.Button.Two);
         AButton = OVRInput.Get(OVRInput.Button.One);
 
+        //Remove nulls from selection list
+        ListOfSelections.RemoveAll(item => item == null);
+
         //Hide selectionSPhere and make it small if trigger is not presse
         if (IsSelectionCreated == true && RightIndexTrigger == 0)
         {
@@ -57,16 +68,22 @@ public class SelectionScript : MonoBehaviour {
         }
 
         //Start selection tool if no fighters are selected and right index trigger is pressed 
-        if (RightIndexTrigger > 0) SelectFighters();
+        if (RightIndexTrigger > 0)
+        {
+            SelectFighters();
+        }
 
         //Clear selection with click of right thumbstick
-        if (OVRInput.Get(OVRInput.Button.SecondaryThumbstick) && IsSelectionCreated == false)
+        if (OVRInput.Get(OVRInput.Button.SecondaryThumbstick) && IsSelectionCreated == false && ListOfSelections.Count > 0)
         {
             ClearSelection();
         }
 
         //start destination tool if there are fighters selected
-        if (ListOfSelections.Count >= 1 && IsSelectionCreated == false) SetFighterDestination();
+        if (ListOfSelections.Count >= 1 && IsSelectionCreated == false)
+        {
+            SetFighterDestination();
+        }
 
     }
 
@@ -83,7 +100,7 @@ public class SelectionScript : MonoBehaviour {
         //Go through fighters and deselect them
         for (int i = 0; i < ListOfSelections.Count; i++)
         {
-            ListOfSelections[i].GetComponentInParent<Fighter>().IsSelected(false);
+            if(ListOfSelections[i]) ListOfSelections[i].GetComponentInParent<Fighter>().IsSelected(false);
         }
         //Clear the list
         ListOfSelections.Clear();
@@ -92,6 +109,7 @@ public class SelectionScript : MonoBehaviour {
 
     private void SelectFighters()
     {
+
         //Do this if the button has not been pressed earlier
         if (IsSelectionCreated == false && ListOfSelections.Count == 0 && IsRightThumStickPressed == false) 
         {
@@ -170,8 +188,7 @@ public class SelectionScript : MonoBehaviour {
                 GameObject Target = hit.transform.parent.gameObject;
                 for (int i = 0; i < ListOfSelections.Count; i++)
                 {
-                    //print("Target Set" + i);
-                    ListOfSelections[i].GetComponentInParent<Fighter>().SetTarget(Target);
+                    if(ListOfSelections[i]) ListOfSelections[i].GetComponentInParent<Fighter>().SetTarget(Target);
                 }
                 //Clear selections after target is set
                 ClearSelection();
@@ -183,8 +200,7 @@ public class SelectionScript : MonoBehaviour {
 
     void OnTriggerEnter(Collider collision)
     {
-        //To-Do add detection for only player Fighters
-        if (collision.gameObject.tag == "Fighter" && IsSelectionCreated == true && IsRightThumStickPressed == false)
+        if (collision.gameObject.tag == "Fighter" && IsSelectionCreated == true && IsRightThumStickPressed == false && collision.gameObject.layer == SelectionLayerMask)
         {
             ListOfSelections.Add(collision.gameObject);
             collision.gameObject.GetComponentInParent<Fighter>().IsSelected(true); //Let the fighter know its been selected

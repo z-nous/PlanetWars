@@ -2,18 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemyAI : MonoBehaviour {
+public class EnemyAI {
 
     private List<GameObject> Planets;
     private List<GameObject> Fighters;
     private GameObject Target;
     private int PlayerNumber = 0;
-
+    private float Timer1 = 0f;
     //Constructors
     public EnemyAI(int playernumber)
     {
         Planets = new List<GameObject>(GameObject.FindGameObjectsWithTag("Planet"));
         Fighters = new List<GameObject>();
+        SelectTarget();
+        ShufflePlanetList(); //Add ramdomness to attacking
         PlayerNumber = playernumber;
     }
 
@@ -28,7 +30,12 @@ public class EnemyAI : MonoBehaviour {
     }
 
     public void DoThings () {
-        if(!Target)SelectTarget();
+        Timer1 += Time.deltaTime;
+        if (Timer1 > 30f || Target.GetComponent<Planet>().Owner == PlayerNumber)
+        {
+            Timer1 = 0f;
+            SelectTarget();
+        }
 
         if (Target) Attack();
 
@@ -38,9 +45,9 @@ public class EnemyAI : MonoBehaviour {
     {
 
         //clear target if it is owned.
-        if (Target.GetComponent<Planet>().Owner == PlayerNumber) Target = null;
+        //if (Target.GetComponent<Planet>().Owner == PlayerNumber) Target = null;
 
-        if(Fighters.Count > 50)
+        if(Fighters.Count > 20)
         {
             bool fliplop = true;
             foreach (GameObject fighter in Fighters)
@@ -54,23 +61,35 @@ public class EnemyAI : MonoBehaviour {
     private void SelectTarget()
     {
         //Very simple target selection
-        //ADD things like closest enemy planet and other stuff, like number of enemy fighters at the target planet
+        //ADD things like closest enemy planet and number of enemy fighters at the target planet
 
         foreach (GameObject planet in Planets)
         {
             int planetowner = planet.GetComponent<Planet>().Owner;
 
-            if (planetowner == 0)
-            {
-                Target = planet;
-                return;
-            }
-
             if (planetowner != PlayerNumber)
             {
                 Target = planet;
-                return;
+                if (planetowner == 0)
+                {
+                    Target = planet;
+                    ShufflePlanetList();
+                    return;
+                }
             }
+        }
+        ShufflePlanetList();
+    }
+
+    private void ShufflePlanetList()
+    {
+        
+        for (int i = 0; i < Planets.Count; i++)
+        {
+            GameObject temp = Planets[i];
+            int randomIndex = Random.Range(i, Planets.Count);
+            Planets[i] = Planets[randomIndex];
+            Planets[randomIndex] = temp;
         }
     }
 }

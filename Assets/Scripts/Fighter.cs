@@ -13,6 +13,7 @@ public class Fighter : MonoBehaviour {
     public float OrbitInclinationVariance = 0.1f; //Variance in orbit inclinations
     public float SeeingDistance = 0.5f;
     public GameObject IsSelectedMesh; //Mesh to show if the fighter is selected
+    public int IsTargeted = 0;
 
     private GameObject GameMaster; //Game master
     private GameObject LastTarge; //Last target of the fighter
@@ -75,7 +76,7 @@ public class Fighter : MonoBehaviour {
 
     private void Attack()
     {
-        //Check if the enemi si still in the game
+        //Check if the enemy is still in the game
         if(EnemyFighter == true)
         {
             transform.position = Vector3.MoveTowards(transform.position, EnemyFighter.position, Speed / 500 * Time.deltaTime);
@@ -94,6 +95,17 @@ public class Fighter : MonoBehaviour {
         if (hitColliders.Length > 0)
         {
             Debug.DrawLine(transform.position, hitColliders[0].transform.position, Color.red);
+            /*
+            for (int i = 0; i < hitColliders.Length; i++)
+            {
+                if (hitColliders[i].GetComponentInParent<Fighter>().IsTargeted < 20)
+                {
+                    EnemyFighter = hitColliders[i].transform;
+                    hitColliders[i].GetComponentInParent<Fighter>().SetAsTarget();
+                }
+                else return;
+            }*/
+
             EnemyFighter = hitColliders[0].transform;
             //enemies are near. 
             IsEnemyNear = true;
@@ -169,6 +181,18 @@ public class Fighter : MonoBehaviour {
             Color temp = new Color(1f, 0f, 0f, 0.5f);
             IsSelectedMesh.GetComponent<Renderer>().material.color = temp;
         }
+        if (Owner == 3)
+        {
+            gameObject.GetComponentInChildren<Renderer>().material.color = Color.green;
+            Color temp = new Color(1f, 0f, 0f, 0.5f);
+            IsSelectedMesh.GetComponent<Renderer>().material.color = temp;
+        }
+        if (Owner == 4)
+        {
+            gameObject.GetComponentInChildren<Renderer>().material.color = Color.yellow;
+            Color temp = new Color(1f, 0f, 0f, 0.5f);
+            IsSelectedMesh.GetComponent<Renderer>().material.color = temp;
+        }
     }
 
     //Public functions
@@ -238,4 +262,8 @@ public class Fighter : MonoBehaviour {
 
     }
 
+    public void SetAsTarget()
+    {
+        IsTargeted ++;
+    }
 }
