@@ -80,10 +80,11 @@ public class Planet : MonoBehaviour {
         Health--;
         if(Health == 0)
         {
+            GameMaster.GetComponent<GameMaster>().PlanetOwnershipChanged(NewOwner, Owner);
             Owner = NewOwner;
             SetColor(); //Set right color to planet
             Health++;
-            GameMaster.GetComponent<GameMaster>().PlanetOwnershipChanged(NewOwner, Owner);
+            
         }
     }
 }

@@ -9,49 +9,33 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1000013028615038}
+  m_RootGameObject: {fileID: 1000011335678706}
   m_IsPrefabParent: 1
---- !u!1 &1000013028615038
+--- !u!1 &1000011335678706
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000010316519698}
-  - 114: {fileID: 114000013326967466}
+  - 4: {fileID: 4000012340139136}
   m_Layer: 0
-  m_Name: GameMaster
-  m_TagString: GameMaster
+  m_Name: NetworkManager
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4000010316519698
+--- !u!4 &4000012340139136
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013028615038}
+  m_GameObject: {fileID: 1000011335678706}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -21.41, y: -4.667715, z: -0.98}
+  m_LocalPosition: {x: -18.854193, y: -14.599765, z: -0.45819804}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &114000013326967466
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013028615038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6229ec5c8947453479af6511a8b3a72c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ListOfFighters: []
-  ListOfPlanets: []
-  NumberOfPlayers: 0
-  NumberOfAIPlayers: 2

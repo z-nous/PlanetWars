@@ -9,10 +9,13 @@ public class GameMaster : MonoBehaviour {
     public int NumberOfPlayers = 2;
     public int NumberOfAIPlayers = 1;
 
-    //test AI
+    //List of all Enemy AIs
     private List<EnemyAI> EnemyAIList = new List<EnemyAI>();
-    private List<int> NumberOfOwnedPlanets = new List<int>();
-	// Use this for initialization
+    // List containing player info
+    private List<PlayerInfo> Players = new List<PlayerInfo>();
+    private int TotalNumberOfPlayers = 0;
+    private int NumberOfAlivePlayers = 0;
+
 	void Start () {
 
         //Create AI players
@@ -28,30 +31,47 @@ public class GameMaster : MonoBehaviour {
         //Add all planets to List of planets
         ListOfPlanets = new List<GameObject>(GameObject.FindGameObjectsWithTag("Planet"));
 
-        //initialize the list of owned planets
-        int TotalNumberOfPlayers = NumberOfPlayers + NumberOfAIPlayers;
+
+
+
+        //create and initialize the list of owned planets
+        List<int> NumberOfOwnedPlanets = new List<int>();
+
+        TotalNumberOfPlayers = NumberOfPlayers + NumberOfAIPlayers;
+        NumberOfAlivePlayers = TotalNumberOfPlayers;
         for (int i = 0; i < TotalNumberOfPlayers; i++)
         {
             NumberOfOwnedPlanets.Add(0);
         }
-        
+
         //add owned planets to each player
         foreach (GameObject planet in ListOfPlanets)
         {
             if (planet.GetComponent<Planet>().Owner > 0) NumberOfOwnedPlanets[planet.GetComponent<Planet>().Owner - 1]++;
         }
+
+        //Initialize player info
+        for (int i = 0; i < TotalNumberOfPlayers; i++)
+        {
+            Players.Add(new PlayerInfo(i + 1, NumberOfOwnedPlanets[i]));
+        }
     }
 	
 	// Update is called once per frame
 	void Update () {
+
         //Make enemyAIs do things
         foreach(EnemyAI AI in EnemyAIList)
         {
             AI.DoThings();
         }
 
-        //Check winner
-        CheckForWinner();
+        //Check for winner
+        if (NumberOfAlivePlayers == 1)
+        {
+            CheckForWinner();
+
+        }
 
 	}
 
@@ -95,9 +115,20 @@ public class GameMaster : MonoBehaviour {
 
     public void PlanetOwnershipChanged(int newowner, int oldowner)
     {
-        //FIX this... NOT working atm
-       NumberOfOwnedPlanets[newowner - 1] ++;
-       if (oldowner != 0) NumberOfOwnedPlanets[oldowner - 1]--;
+        //Add one planet for the new owner
+        Players[newowner - 1].NumberOfOwnedPlanets += 1;
+
+        //Remove planet from old owner and check for alive status of that player
+        if (oldowner != 0)
+        {
+            Players[oldowner - 1].NumberOfOwnedPlanets -= 1;
+            if (Players[oldowner - 1].NumberOfOwnedPlanets <= 0)
+            {
+                Players[oldowner - 1].IsAlive = false;
+                NumberOfAlivePlayers--;
+            }
+        }
+
     }
 
     //Used to move fighters and children to right layer
@@ -108,14 +139,22 @@ public class GameMaster : MonoBehaviour {
             MoveToLayer(child, layer);
     }
 
-    private void CheckForWinner()
+    private int CheckForWinner()
     {
-        int winner;
-        for (int i = 0; i < NumberOfOwnedPlanets.Count; i++)
+        int winner = 0;
+
+        //Find the winner
+        for (int i = 0; i < TotalNumberOfPlayers; i++)
         {
-            print("Player" + i + 1 + " " + NumberOfOwnedPlanets[i]);
+            if (Players[i].IsAlive == true)
+            {
+                winner = Players[i].PlayerNumber;
+                print("Player " + winner + " WON!!");
+            }
         }
-        //return winner;
+
+
+        return winner;
     }
 
 }
