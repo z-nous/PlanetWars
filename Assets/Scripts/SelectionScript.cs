@@ -9,6 +9,7 @@ public class SelectionScript : MonoBehaviour {
     public LineRenderer PointingLineRenderer;
     public GameObject SelectionSphere;
     public int PlayerNumber = 1;
+    public TextMesh InfoText;
 
     private bool IsSelectionCreated = false; //is selection cube created
     private bool IsRightThumStickPressed = false;
@@ -41,6 +42,9 @@ public class SelectionScript : MonoBehaviour {
         PointingLineRenderer.SetPosition(0, RaycastLocation.position);
         PointingLineRenderer.SetPosition(1, RaycastLocation.position);
 
+        //Update counter of selected fighters
+        InfoText.text = ListOfSelections.Count.ToString();
+
         //Create selection layermask so only player owned fighters can be selected
         if (PlayerNumber == 1) SelectionLayerMask = 8;
         if (PlayerNumber == 2) SelectionLayerMask = 9;
@@ -58,7 +62,7 @@ public class SelectionScript : MonoBehaviour {
 
         //Remove nulls from selection list
         ListOfSelections.RemoveAll(item => item == null);
-
+        
         //Hide selectionSPhere and make it small if trigger is not presse
         if (IsSelectionCreated == true && RightIndexTrigger == 0)
         {
@@ -104,6 +108,9 @@ public class SelectionScript : MonoBehaviour {
         }
         //Clear the list
         ListOfSelections.Clear();
+
+        //update info on selected fighter amount
+        InfoText.text = ListOfSelections.Count.ToString();
     }
 
 
@@ -205,6 +212,8 @@ public class SelectionScript : MonoBehaviour {
             ListOfSelections.Add(collision.gameObject);
             collision.gameObject.GetComponentInParent<Fighter>().IsSelected(true); //Let the fighter know its been selected
             //print(ListOfSelections.Count);
+
+            InfoText.text = ListOfSelections.Count.ToString();
         }
     }
 
@@ -216,6 +225,7 @@ public class SelectionScript : MonoBehaviour {
             ListOfSelections.Remove(collision.gameObject);
             collision.gameObject.GetComponentInParent<Fighter>().IsSelected(false); //Let the fighter know it's been deselected
             //print(ListOfSelections.Count);
+            InfoText.text = ListOfSelections.Count.ToString();
         }
     }
 }
