@@ -16,8 +16,13 @@ public class GameMaster : MonoBehaviour {
     private int TotalNumberOfPlayers = 0;
     private int NumberOfAlivePlayers = 0;
 
-	void Start () {
+    //testing map handling
+    private MapHandler maphandler = new MapHandler();
 
+	void Start () {
+        //testing Map handling
+        maphandler.SaveMap();
+        maphandler.LoadMap();
         //Create AI players
 
         for (int i = 0; i < NumberOfAIPlayers; i++)
