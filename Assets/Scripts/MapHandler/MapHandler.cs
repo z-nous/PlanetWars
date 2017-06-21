@@ -23,7 +23,7 @@ public class MapHandler {
         }
 
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream saveFile = File.Create(MapName + ".dat");
+        FileStream saveFile = File.Create(MapName + ".map");
         bf.Serialize(saveFile, PlayingField);
         saveFile.Close();
 
@@ -33,7 +33,7 @@ public class MapHandler {
     {
         //Add loading map from file here
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream MapData = File.Open(MapName + ".dat",FileMode.Open);
+        FileStream MapData = File.Open(MapName + ".map",FileMode.Open);
         PlayingField = (List<Map>)bf.Deserialize(MapData);
         MapData.Close();
 
