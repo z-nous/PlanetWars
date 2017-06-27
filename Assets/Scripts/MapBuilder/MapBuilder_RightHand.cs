@@ -33,13 +33,13 @@ public class MapBuilder_RightHand : MonoBehaviour {
         AButton = OVRInput.Get(OVRInput.Button.One);
         RightThumbstickPress = OVRInput.Get(OVRInput.Button.SecondaryThumbstick);
         RighThumbstick = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
-        
-        if(HoldingPlanet == true)
+
+        Point();
+
+        if (HoldingPlanet == true)
         {
             MovePlanet();
         }
-
-        Point();
 
         if(HoldingPlanet == true && RightMiddleTrigger == 0)
         {
@@ -62,12 +62,13 @@ public class MapBuilder_RightHand : MonoBehaviour {
             //Draw raycast for debugging
             Debug.DrawLine(gameObject.transform.position, hit.point, Color.red);
 
-            //this is for grabbing planets that player points at
-            if(hit.transform.tag == "PlanetChild" && HoldingPlanet == false && RightMiddleTrigger > 0)
+            //Move the planet that the player is pointing at
+            if(hit.transform.tag == "Planetchild" && HoldingPlanet == false && RightMiddleTrigger > 0f)
             {
-                
-                //HeldPlanet = (GameObject)hit.transform.gameObject;
-                //HeldPlanet.transform.parent = PlanetSpawnLocation;
+                PlanetSpawnLocation.position = hit.transform.parent.position;
+                HeldPlanet = hit.transform.parent.gameObject;
+                HeldPlanet.transform.parent = PlanetSpawnLocation;
+                HoldingPlanet = true;
             }
             PointingLineRenderer.SetPosition(0, transform.position);
             PointingLineRenderer.SetPosition(1, hit.point);
@@ -83,13 +84,13 @@ public class MapBuilder_RightHand : MonoBehaviour {
 
     private void MovePlanet()
     {
-        PlanetSpawnLocation.localPosition += new Vector3(RighThumbstick.x,0f,RighThumbstick.y) * Time.deltaTime;
-        //PlanetSpawnLocation.localPosition.y += RighThumbstick.y;
+        PlanetSpawnLocation.localPosition += new Vector3(0f,0f, RighThumbstick.y) * Time.deltaTime;
     }
 
     void OnTriggerStay(Collider collision)
     {
-        if(collision.tag == "Planetchild" && RightMiddleTrigger > 0 && HoldingPlanet == false)
+        //Spawn new planets
+        if(collision.tag == "PlanetSpawner" && RightMiddleTrigger > 0 && HoldingPlanet == false)
         {
             HoldingPlanet = true;
             (HeldPlanet = Instantiate(planet, PlanetSpawnLocation.position, Quaternion.identity) as GameObject).transform.parent = PlanetSpawnLocation;

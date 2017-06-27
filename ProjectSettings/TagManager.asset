@@ -8,6 +8,8 @@ TagManager:
   - Planet
   - Fighter
   - Planetchild
+  - PlanetSpawner
+  - OVRCameraRig
   layers:
   - Default
   - TransparentFX
