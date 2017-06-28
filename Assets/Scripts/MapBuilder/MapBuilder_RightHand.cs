@@ -6,6 +6,7 @@ public class MapBuilder_RightHand : MonoBehaviour {
     public Transform PlanetSpawnLocation;
     public LineRenderer PointingLineRenderer;
     public Transform RaycastLocation;
+
     //Controller values
     private float RighIndexTrigger;
     private float RightMiddleTrigger;
@@ -17,7 +18,13 @@ public class MapBuilder_RightHand : MonoBehaviour {
     private GameObject HeldPlanet;
     private GameObject planet;
 	// Use this for initialization
-	void Start () {
+
+    //For press detection
+    private bool IsAButtonePressed = false;
+    private bool IsBButtonPressed = false;
+    private bool IsRightThumbstickPressed = false;
+
+    void Start () {
 
         planet = (GameObject)(Resources.Load(Constants.PREFAB_MAP_PLANET));
 
@@ -46,6 +53,17 @@ public class MapBuilder_RightHand : MonoBehaviour {
             LetGo();
         }
 
+
+        //For press and hold detection
+        if (AButton == true) IsAButtonePressed = true;
+        else IsAButtonePressed = false;
+
+        if (BButton == true) IsBButtonPressed = true;
+        else IsBButtonPressed = false;
+
+        if (RightThumbstickPress == true) IsRightThumbstickPressed = true;
+        else IsRightThumbstickPressed = false;
+
     }
 
     private void Point()
@@ -70,6 +88,18 @@ public class MapBuilder_RightHand : MonoBehaviour {
                 HeldPlanet.transform.parent = PlanetSpawnLocation;
                 HoldingPlanet = true;
             }
+
+            //Do this when pointing at planet or planet menu and pressing b button
+            if(hit.transform.tag == "PlanetMenu" && BButton == true && IsBButtonPressed == false && HoldingPlanet == false || hit.transform.tag == "Planetchild" && BButton == true  && IsBButtonPressed == false && HoldingPlanet == false)
+            {
+                    hit.transform.gameObject.GetComponentInParent<Map_Planet>().SetOwner();
+            }
+            //Do this when pointing at planet or planet menu and pressing A button
+            if (hit.transform.tag == "PlanetMenu" && AButton == true && IsBButtonPressed == false && HoldingPlanet == false || hit.transform.tag == "Planetchild" && AButton == true && IsBButtonPressed == false && HoldingPlanet == false)
+            {
+                GameObject.Destroy(hit.transform.parent.gameObject);
+            }
+            //draw the pointing line
             PointingLineRenderer.SetPosition(0, transform.position);
             PointingLineRenderer.SetPosition(1, hit.point);
         }

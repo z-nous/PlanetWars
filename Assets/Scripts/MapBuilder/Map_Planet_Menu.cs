@@ -16,4 +16,5 @@ public class Map_Planet_Menu : MonoBehaviour {
         //transform.rotation = transform.position - Player.transform.position
         transform.LookAt(2*transform.position - Player.transform.position);
 	}
+
 }

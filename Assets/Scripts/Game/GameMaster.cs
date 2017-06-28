@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class GameMaster : MonoBehaviour {
 
@@ -22,7 +23,7 @@ public class GameMaster : MonoBehaviour {
 	void Start () {
         //testing Map handling
         //maphandler.SaveMap("maptest");
-        maphandler.LoadMap("maptest");
+        maphandler.LoadMap("Map1");
         //Create AI players
 
         for (int i = 0; i < NumberOfAIPlayers; i++)
@@ -75,7 +76,8 @@ public class GameMaster : MonoBehaviour {
         if (NumberOfAlivePlayers == 1)
         {
             CheckForWinner();
-
+            //Load main menu after game
+            SceneManager.LoadScene(Constants.SCENE_MAINMENU);
         }
 
 	}

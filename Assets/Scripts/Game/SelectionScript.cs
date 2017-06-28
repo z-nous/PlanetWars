@@ -177,6 +177,9 @@ public class SelectionScript : MonoBehaviour {
     {
         RaycastHit hit;
 
+        //Draw the pointing line
+        PointingLineRenderer.SetPosition(0, transform.position);
+        PointingLineRenderer.SetPosition(1, transform.forward * 20f + transform.position);
         //Cast rays to see if something is hit
 
         if(Physics.Raycast(RaycastLocation.position,gameObject.transform.forward,out hit, 20f, PlanetLayerMask))

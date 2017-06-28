@@ -10,6 +10,10 @@ TagManager:
   - Planetchild
   - PlanetSpawner
   - OVRCameraRig
+  - PlanetMenu
+  - NewGame
+  - MapEditor
+  - ExitGame
   layers:
   - Default
   - TransparentFX
