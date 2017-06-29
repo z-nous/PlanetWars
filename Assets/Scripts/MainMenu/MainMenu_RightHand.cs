@@ -67,21 +67,10 @@ public class MainMenu_RightHand : MonoBehaviour
             Debug.DrawLine(gameObject.transform.position, hit.point, Color.red);
 
             //Move the planet that the player is pointing at
-            print(hit.transform.tag);
-
-            if (hit.transform.tag == "NewGame" && AButton == true && IsAButtonePressed == false)
+            //when pointing at HandMenu button and pressing a or b button
+            if (hit.transform.tag == "HandMenuButton" && AButton == true && IsBButtonPressed == false || hit.transform.tag == "HandMenuButton" && BButton == true && IsBButtonPressed)
             {
-                hit.transform.GetComponentInParent<MainMenu>().StartGame();
-            }
-
-            if (hit.transform.tag == "MapEditor" && AButton == true && IsAButtonePressed == false)
-            {
-                hit.transform.GetComponentInParent<MainMenu>().StartLevelEditor();
-            }
-
-            if (hit.transform.tag == "ExitGame" && AButton == true && IsAButtonePressed == false)
-            {
-                hit.transform.GetComponentInParent<MainMenu>().ExitGame();
+                hit.transform.gameObject.GetComponent<MenuButtonScript>().PressButton();
             }
 
             //draw the pointing line

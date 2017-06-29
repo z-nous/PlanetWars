@@ -12,15 +12,20 @@ public class MenuButtonScript : MonoBehaviour {
 
     }
 
-    void OnTriggerEnter(Collider collision)
+    public void PressButton()
     {
         Menu.GetComponent<MenuScript>().ButtonPress(ButtonNumber);
+    }
+
+    void OnTriggerEnter(Collider collision)
+    {
+        //Menu.GetComponent<MenuScript>().ButtonPress(ButtonNumber);
 
     }
 
     void OnTriggerExit(Collider collision)
     {
-        Menu.GetComponent<MenuScript>().ButtonReleased();
+        //Menu.GetComponent<MenuScript>().ButtonReleased();
     }
 
     }

@@ -79,7 +79,7 @@ public class MapBuilder_RightHand : MonoBehaviour {
         {
             //Draw raycast for debugging
             Debug.DrawLine(gameObject.transform.position, hit.point, Color.red);
-
+            
             //Move the planet that the player is pointing at
             if(hit.transform.tag == "Planetchild" && HoldingPlanet == false && RightMiddleTrigger > 0f)
             {
@@ -99,6 +99,12 @@ public class MapBuilder_RightHand : MonoBehaviour {
             {
                 GameObject.Destroy(hit.transform.parent.gameObject);
             }
+            //when pointing at HandMenu button and pressing a or b button
+            if (hit.transform.tag == "HandMenuButton" && AButton == true && IsBButtonPressed == false && HoldingPlanet == false || hit.transform.tag == "HandMenuButton" && BButton == true && IsBButtonPressed == false && HoldingPlanet == false)
+            {
+                hit.transform.gameObject.GetComponent<MenuButtonScript>().PressButton();
+            }
+
             //draw the pointing line
             PointingLineRenderer.SetPosition(0, transform.position);
             PointingLineRenderer.SetPosition(1, hit.point);
@@ -107,9 +113,11 @@ public class MapBuilder_RightHand : MonoBehaviour {
 
     private void LetGo()
     {
-        HeldPlanet.transform.parent = null;
-        HoldingPlanet = false;
-        PlanetSpawnLocation.localPosition = new Vector3(0f, 0f, 0f);
+        if (HeldPlanet) { 
+            HeldPlanet.transform.parent = null;
+            HoldingPlanet = false;
+            PlanetSpawnLocation.localPosition = new Vector3(0f, 0f, 0f);
+        }
     }
 
     private void MovePlanet()

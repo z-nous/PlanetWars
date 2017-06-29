@@ -15,6 +15,8 @@ public class Fighter : MonoBehaviour {
     public GameObject IsSelectedMesh; //Mesh to show if the fighter is selected
     public int IsTargeted = 0;
 
+    private AudioSource audiosource;
+
     private GameObject GameMaster; //Game master
     private GameObject LastTarge; //Last target of the fighter
     private Transform EnemyFighter;

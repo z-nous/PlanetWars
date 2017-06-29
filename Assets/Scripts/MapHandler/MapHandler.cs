@@ -18,18 +18,18 @@ public class MapHandler {
         //"read" the current map
         PlayingField.Clear();
 
-        int i = 0;
         foreach(GameObject planet in GameObject.FindGameObjectsWithTag("Planet"))
         {
-            i++;
             //Add all the information about the planets and owners to a list of map.
             PlayingField.Add(new Map(planet.transform.position, planet.GetComponent<Map_Planet>().GetOwner()));
+
         }
-        MonoBehaviour.print(i);
+
+
+
 
         BinaryFormatter bf = new BinaryFormatter();
-        File.Delete("Maps/" + MapName + ".map");
-        FileStream saveFile = File.Create("Maps/" + MapName + ".map");
+        FileStream saveFile = File.Create(Application.dataPath + "/StreamingAssets" + "/Maps/" + MapName + ".map");
         bf.Serialize(saveFile, PlayingField);
         saveFile.Close();
 
@@ -40,7 +40,7 @@ public class MapHandler {
         PlayingField.Clear();
         //Add loading map from file here
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream MapData = File.Open("Maps/" + MapName + ".map",FileMode.Open);
+        FileStream MapData = File.Open(Application.dataPath + "/StreamingAssets" + "/Maps/" + MapName + ".map",FileMode.Open);
         PlayingField = (List<Map>)bf.Deserialize(MapData);
         MapData.Close();
 
@@ -63,7 +63,7 @@ public class MapHandler {
         PlayingField.Clear();
         //Add loading map from file here
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream MapData = File.Open("Maps/" + MapName + ".map", FileMode.Open);
+        FileStream MapData = File.Open(Application.dataPath + "/StreamingAssets" +"/Maps/" + MapName + ".map", FileMode.Open);
         PlayingField = (List<Map>)bf.Deserialize(MapData);
         MapData.Close();
 

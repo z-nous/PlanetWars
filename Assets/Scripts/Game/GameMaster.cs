@@ -7,7 +7,7 @@ public class GameMaster : MonoBehaviour {
 
     public List<GameObject> ListOfFighters;
     public List<GameObject> ListOfPlanets;
-    public int NumberOfPlayers = 2;
+    public int NumberOfPlayers = 1;
     public int NumberOfAIPlayers = 1;
 
     //List of all Enemy AIs
@@ -17,13 +17,44 @@ public class GameMaster : MonoBehaviour {
     private int TotalNumberOfPlayers = 0;
     private int NumberOfAlivePlayers = 0;
 
-    //testing map handling
+    //Map handler to load map
     private MapHandler maphandler = new MapHandler();
 
 	void Start () {
-        //testing Map handling
-        //maphandler.SaveMap("maptest");
+        //Load Map
         maphandler.LoadMap("Map1");
+
+        //Count how many players there are in a map
+        int playersinmap = 0;
+        bool player1 = false;
+        bool player2 = false;
+        bool player3 = false;
+        bool player4 = false;
+        foreach (GameObject planet in GameObject.FindGameObjectsWithTag("Planet"))
+        {
+            if (planet.GetComponent<Planet>().Owner == 1 && player1 == false)
+            {
+                playersinmap++;
+                player1 = true;
+            }
+            if (planet.GetComponent<Planet>().Owner == 2 && player2 == false)
+            {
+                playersinmap++;
+                player2 = true;
+            }
+            if (planet.GetComponent<Planet>().Owner == 3 && player3 == false)
+            {
+                playersinmap++;
+                player3 = true;
+            }
+            if (planet.GetComponent<Planet>().Owner == 4 && player4 == false)
+            {
+                playersinmap++;
+                player4 = true;
+            }
+        }
+        //Set correct amount of ai players
+        NumberOfAIPlayers = playersinmap - NumberOfPlayers;
         //Create AI players
 
         for (int i = 0; i < NumberOfAIPlayers; i++)
