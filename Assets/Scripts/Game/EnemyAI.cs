@@ -9,6 +9,7 @@ public class EnemyAI {
     private GameObject Target;
     private int PlayerNumber = 0;
     private float Timer1 = 0f;
+    private float attackTimer = 0f;
     //Constructors
     public EnemyAI(int playernumber)
     {
@@ -31,15 +32,21 @@ public class EnemyAI {
 
     public void DoThings () {
         Timer1 += Time.deltaTime;
-        if (Timer1 > 30f || Target.GetComponent<Planet>().Owner == PlayerNumber)
+        attackTimer += Time.deltaTime;
+        if (Timer1 > 60f || Target.GetComponent<Planet>().Owner == PlayerNumber)
         {
             Timer1 = 0f;
             SelectTarget();
+            
         }
 
-        if (Target) Attack();
+        if (Target && attackTimer > 30f)
+        {
+            Attack();
+            attackTimer = 0f;
+        }
 
-	}
+    }
 
     private void Attack()
     {

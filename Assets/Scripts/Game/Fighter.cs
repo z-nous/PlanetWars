@@ -15,20 +15,22 @@ public class Fighter : MonoBehaviour {
     public GameObject IsSelectedMesh; //Mesh to show if the fighter is selected
     public int IsTargeted = 0;
 
-    private AudioSource audiosource;
-
     private GameObject GameMaster; //Game master
-    private GameObject LastTarge; //Last target of the fighter
-    private Transform EnemyFighter;
-    private bool Orbiting = false; //Is fighter orbiting
-    private bool LineOfSightToTarget = true; //Is there a line of sight to target
-    private bool IsEnemyNear = false;
-    private int TargetOwner = 0; //Owner of the target
-    private float DistanceToTarget = 0f; //Distance to target
-    private float OrbitDistance = 0f;
-    private Vector3 OrbitInclination; //Orbit inclination
-    private int PlanetLayerMask;
-    private int EnemyLayerMask;
+    public GameObject LastTarge; //Last target of the fighter
+    public Transform EnemyFighter;
+    public bool Orbiting = false; //Is fighter orbiting
+    public bool LineOfSightToTarget = true; //Is there a line of sight to target
+    public bool IsEnemyNear = false;
+    public int TargetOwner = 0; //Owner of the target
+    public float DistanceToTarget = 0f; //Distance to target
+    public float OrbitDistance = 0f;
+    public Vector3 OrbitInclination; //Orbit inclination
+    public int PlanetLayerMask;
+    public int EnemyLayerMask;
+
+    public float orbitTimer = 0f; //Timer to steer clear of planets
+    public float orbitDelay = .3f; //Delay before heading to new target
+
     // Use this for initialization
     void Start () {
         //Set Planets layer mask for raycasting
@@ -88,6 +90,7 @@ public class Fighter : MonoBehaviour {
         else
         {
             IsEnemyNear = false;
+            Orbiting = false;
         }
     }
 
@@ -109,16 +112,18 @@ public class Fighter : MonoBehaviour {
                 else return;
             }*/
 
-            EnemyFighter = hitColliders[0].transform;
+            //EnemyFighter = hitColliders[0].transform;
+            EnemyFighter = hitColliders[Random.Range(0, hitColliders.Length)].transform;
             //enemies are near. 
             IsEnemyNear = true;
         }
     }
-    //private functions
+
     //Orbit around planet if owned by player
     private void OrbitPlanet()
     {
         transform.RotateAround(Target.transform.position,OrbitInclination, OrbitSpeed * Time.deltaTime);
+        transform.LookAt(Target.transform);
     }
     //Orbit around certain target
     private void OrbitPlanet(GameObject PlanetToOrbit)
@@ -129,28 +134,48 @@ public class Fighter : MonoBehaviour {
 
     private void MoveTowards()
     {
-        //get distance to target and move forward
-        
-        CheckLineOfSight();
+
+        //Check target owner and distance. If ok, move towards
+        DistanceToTarget = Vector3.Distance(gameObject.transform.position, Target.transform.position);
+        TargetOwner = Target.GetComponentInParent<Planet>().GetOwner();
+        if (DistanceToTarget < OrbitDistance && TargetOwner == Owner)
+        {
+            Orbiting = true;
+            return;
+        }
+
+        if (LineOfSightToTarget == false)CheckLineOfSight();
 
         if (LineOfSightToTarget == true)
         {
-            transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Speed / 500 * Time.deltaTime);
-            transform.LookAt(Target.transform);
+            orbitTimer += Time.deltaTime;
+            if (orbitTimer < orbitDelay && Orbiting == false)
+            {
+                if(LastTarge)OrbitPlanet(LastTarge);
+                else //FIX THIS. Fighters still migh hit the wrong planet
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Speed / 500 * Time.deltaTime);
+                    transform.LookAt(Target.transform);
+                }
+                return;
+            }
+            else
+            {
+                transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Speed / 500 * Time.deltaTime);
+                transform.LookAt(Target.transform);
+                return;
+            }
+
         }
 
         //If there is no line of sight, keep orbiting.
         if (LineOfSightToTarget == false)
         {
-            OrbitPlanet(LastTarge);
+            if (LastTarge) OrbitPlanet(LastTarge);
+            else OrbitPlanet();
+            return;
         }
 
-        //If the figther is close enough to player owned planet, start orbiting
-        DistanceToTarget = Vector3.Distance(gameObject.transform.position, Target.transform.position);
-        if (DistanceToTarget < OrbitDistance && TargetOwner == Owner)
-        {
-            Orbiting = true;
-        }
     }
 
     private void CheckLineOfSight()
@@ -225,6 +250,7 @@ public class Fighter : MonoBehaviour {
         TargetOwner = Target.GetComponentInParent<Planet>().GetOwner();
         LineOfSightToTarget = false;
         Orbiting = false;
+        orbitTimer = 0f;
     }
 
     public void SetOwner(int owner)
