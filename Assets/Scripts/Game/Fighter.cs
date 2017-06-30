@@ -82,6 +82,7 @@ public class Fighter : MonoBehaviour {
         if(EnemyFighter == true)
         {
             transform.position = Vector3.MoveTowards(transform.position, EnemyFighter.position, Speed / 500 * Time.deltaTime);
+            transform.LookAt(EnemyFighter.transform);
             Debug.DrawLine(transform.position, EnemyFighter.position,Color.red);
         }
         else
@@ -123,6 +124,7 @@ public class Fighter : MonoBehaviour {
     private void OrbitPlanet(GameObject PlanetToOrbit)
     {
         transform.RotateAround(PlanetToOrbit.transform.position, OrbitInclination, OrbitSpeed * Time.deltaTime);
+        transform.LookAt(PlanetToOrbit.transform);
     }
 
     private void MoveTowards()
@@ -134,6 +136,7 @@ public class Fighter : MonoBehaviour {
         if (LineOfSightToTarget == true)
         {
             transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, Speed / 500 * Time.deltaTime);
+            transform.LookAt(Target.transform);
         }
 
         //If there is no line of sight, keep orbiting.
@@ -239,6 +242,7 @@ public class Fighter : MonoBehaviour {
         //while hitting own planet
         if (collision.gameObject.tag == "Planetchild" && collision.gameObject.GetComponentInParent<Planet>().GetOwner() == Owner)
         {
+            
             if (collision.gameObject.GetComponentInParent<Planet>().AddHealth() == true) //if health added. remove fighter 
             {
                 GameMaster.GetComponent<GameMaster>().RemoveFighterFromList(this.gameObject);
@@ -252,6 +256,7 @@ public class Fighter : MonoBehaviour {
         //while hitting enemy planet
         if (collision.gameObject.tag == "Planetchild" && collision.gameObject.GetComponentInParent<Planet>().GetOwner() != Owner)  
         {
+            collision.gameObject.GetComponent<Distorter>().distort(.2f, 0.5f);
             collision.gameObject.GetComponentInParent<Planet>().MinusHealth(Owner); //Minus planet health
             GameMaster.GetComponent<GameMaster>().RemoveFighterFromList(this.gameObject); //Remove fighter
         }

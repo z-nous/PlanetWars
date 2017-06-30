@@ -38,6 +38,7 @@ GameObject:
   - 33: {fileID: 33000010978673294}
   - 135: {fileID: 135000013236851824}
   - 23: {fileID: 23000010071191192}
+  - 114: {fileID: 114000013685595120}
   m_Layer: 12
   m_Name: Planet
   m_TagString: Planetchild
@@ -109,8 +110,8 @@ MeshRenderer:
   m_GameObject: {fileID: 1000012067696918}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_MotionVectors: 1
+  m_ReceiveShadows: 0
+  m_MotionVectors: 0
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
@@ -154,6 +155,22 @@ MonoBehaviour:
   Health: 20
   Owner: 0
   FigtherSpawnInterval: 1
+--- !u!114 &114000013685595120
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012067696918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4e3f391475fcd74abc076837d631b2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intensity: 0.5
+  interval: 0
+  multiplier: 1
+  isDistortionActie: 0
+  distortTime: 1
 --- !u!135 &135000013236851824
 SphereCollider:
   m_ObjectHideFlags: 1

@@ -36,7 +36,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 462878646}
+  m_Sun: {fileID: 0}
   m_IndirectSpecularColor: {r: 0.16453433, g: 0.108016916, b: 0.22375971, a: 1}
 --- !u!157 &3
 LightmapSettings:
@@ -90,32 +90,32 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &462878645
+--- !u!1 &1440433191
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 462878647}
-  - 108: {fileID: 462878646}
+  - 4: {fileID: 1440433193}
+  - 108: {fileID: 1440433192}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Directional Light (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!108 &462878646
+--- !u!108 &1440433192
 Light:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 462878645}
+  m_GameObject: {fileID: 1440433191}
   m_Enabled: 1
   serializedVersion: 7
-  m_Type: 1
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -140,19 +140,19 @@ Light:
   m_BounceIntensity: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!4 &462878647
+--- !u!4 &1440433193
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 462878645}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_GameObject: {fileID: 1440433191}
+  m_LocalRotation: {x: -0.20635937, y: 0.0034591786, z: 0.041881755, w: 0.97757345}
   m_LocalPosition: {x: -0.466, y: 3.781, z: 0.806}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: -23.781002, y: -0.64000005, z: 4.9020004}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!1001 &1690789341
 Prefab:
   m_ObjectHideFlags: 0
@@ -190,7 +190,17 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4000013092039966, guid: 8bc7f04027564d54a9f03c2871eda8d3, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 120000011222011864, guid: 8bc7f04027564d54a9f03c2871eda8d3,
+        type: 2}
+      propertyPath: m_Parameters.startWidth
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 120000011222011864, guid: 8bc7f04027564d54a9f03c2871eda8d3,
+        type: 2}
+      propertyPath: m_Parameters.endWidth
+      value: 0.01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8bc7f04027564d54a9f03c2871eda8d3, type: 2}
